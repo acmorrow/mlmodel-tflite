@@ -34,6 +34,7 @@ conan install . --update `
       --build=missing `
       -s:a build_type=Release `
       -s:a "viam-cpp-sdk/*:build_type=RelWithDebInfo" `
+      -s:a "&:build_type=RelWithDebInfo" `
       -s:a compiler.cppstd=17 `
       -o:a "*:shared=False" `
       -o:a "&:shared=False" `
@@ -46,6 +47,7 @@ conan build . `
       --build=none `
       -s:a build_type=Release `
       -s:a "viam-cpp-sdk/*:build_type=RelWithDebInfo" `
+      -s:a "&:build_type=RelWithDebInfo" `
       -s:a compiler.cppstd=17 `
       -o:a "*:shared=False" `
       -o:a "&:shared=False" `
