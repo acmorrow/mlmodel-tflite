@@ -55,7 +55,6 @@ conan install --update `
       -o:a "&:shared=False" `
       -c:a tools.microsoft:winsdk_version=10.0.17763.0 `
       -s:a compiler.runtime=static `
-      -tf `"`"
 
 # Clean up
 Pop-Location  # viam-cpp-sdk

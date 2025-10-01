@@ -57,6 +57,22 @@ jobs:
         uses: GuillaumeFalourd/setup-windows10-sdk-action@v2.4
         with:
           sdk-version: 17763
+      # The SDK installer successfully installs the SDK files, but Visual Studio's MSBuild
+      # doesn't automatically detect it. We need to set environment variables that MSBuild
+      # looks for to locate the SDK. These variables tell MSBuild:
+      # - WindowsSdkDir: The root directory where Windows Kits are installed
+      # - WindowsSDKVersion: The specific SDK version to use (must include trailing backslash)
+      # - WindowsSDKLibVersion: The lib version (typically same as SDK version)
+      # Without these, MSBuild will fail with "The Windows SDK version X.X.X was not found"
+      # even though the SDK is installed. This is a known limitation when installing SDKs
+      # after Visual Studio is already present on the system.
+      - name: Configure SDK paths for MSBuild
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          echo "WindowsSdkDir=C:\Program Files (x86)\Windows Kits\10\" >> $env:GITHUB_ENV
+          echo "WindowsSDKVersion=10.0.17763.0\" >> $env:GITHUB_ENV
+          echo "WindowsSDKLibVersion=10.0.17763.0\" >> $env:GITHUB_ENV
       - name: Restore cached libraries
         uses: actions/cache@v3
         with:
