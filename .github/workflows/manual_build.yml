@@ -27,15 +27,6 @@ jobs:
         uses: GuillaumeFalourd/setup-windows10-sdk-action@v2.4
         with:
           sdk-version: 17763
-      # Configure environment variables so MSBuild can find the installed SDK.
-      # See publish.yml for detailed explanation of why this is necessary.
-      - name: Configure SDK paths for MSBuild
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: |
-          echo "WindowsSdkDir=C:\Program Files (x86)\Windows Kits\10\" >> $env:GITHUB_ENV
-          echo "WindowsSDKVersion=10.0.17763.0\" >> $env:GITHUB_ENV
-          echo "WindowsSDKLibVersion=10.0.17763.0\" >> $env:GITHUB_ENV
       - name: Restore cached libraries
         uses: actions/cache@v3
         with:
