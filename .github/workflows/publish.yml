@@ -58,26 +58,6 @@ jobs:
         with:
           version-sdk: 17763
           features: OptionId.DesktopCPPx64
-      - name: Verify SDK installation and registry
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: |
-          # Check if SDK files exist
-          $sdkPath = "C:\Program Files (x86)\Windows Kits\10"
-          if (Test-Path "$sdkPath\Include\10.0.17763.0") {
-            Write-Host "SDK files found at $sdkPath"
-          } else {
-            Write-Error "SDK files not found at expected location"
-            exit 1
-          }
-
-          # Check registry keys that MSBuild uses to find the SDK
-          $kitsRoot = Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows Kits\Installed Roots" -Name "KitsRoot10" -ErrorAction SilentlyContinue
-          Write-Host "KitsRoot10 registry value: $($kitsRoot.KitsRoot10)"
-
-          # List installed SDK versions
-          $versions = Get-ChildItem -Path "$sdkPath\Include" -Directory | Select-Object -ExpandProperty Name
-          Write-Host "Installed SDK versions: $versions"
       - name: Restore cached libraries
         uses: actions/cache@v3
         with:
