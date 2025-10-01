@@ -19,7 +19,20 @@ git clone https://github.com/viamrobotics/viam-cpp-sdk.git
 Push-Location viam-cpp-sdk
 
 # NOTE: If you change this version, also change it in the `conanfile.py` requirements
-git checkout releases/v0.13.2
+git checkout releases/v0.20.0
+
+# Export the recipe to the cache so we can skip rebuilds gracefully
+conan export .
+
+# Otherwise, the C++ SDK build ends up creating two copies of proto and then mixes up which one to use.
+@'
+include(default)
+[replace_tool_requires]
+protobuf/*: protobuf/<host_version>
+'@ | Out-File -FilePath protobuf-override.profile -Encoding ASCII
+
+# Dig out the declared version of the module so we can use it for arguments to --build and --requires below.
+$VIAM_CPP_SDK_VERSION = (conan inspect -vquiet . --format=json | ConvertFrom-Json).version
 
 # Build the C++ SDK repo.
 #
@@ -31,11 +44,15 @@ git checkout releases/v0.13.2
 #
 # TODO: Note `-tf ""`, which disables the self test. I have not been
 # able to get this working on windows.
-conan create . `
+conan install --update `
+      --profile=protobuf-override.profile `
       --build=missing `
-      -o:a "&:shared=False" `
+      --requires=viam-cpp-sdk/$VIAM_CPP_SDK_VERSION `
       -s:a build_type=Release `
+      -s:a "&:build_type=RelWithDebInfo" `
       -s:a compiler.cppstd=17 `
+      -o:a "*:shared=False" `
+      -o:a "&:shared=False" `
       -c:a tools.microsoft:winsdk_version=10.0.17763.0 `
       -s:a compiler.runtime=static `
       -tf `"`"

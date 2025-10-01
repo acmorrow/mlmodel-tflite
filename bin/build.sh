@@ -8,6 +8,13 @@ set -euxo pipefail
 # Clean up any prior build
 rm -rf build-conan
 
+# Otherwise, the C++ SDK build ends up creating two copies of proto and then mixes up which one to use.
+cat > protobuf-override.profile << 'EOF'
+include(default)
+[replace_tool_requires]
+protobuf/*: protobuf/<host_version>
+EOF
+
 # Build the tflite_cpu module
 #
 # We want a static binary, so we turn off shared. Elect for C++17
@@ -20,16 +27,21 @@ rm -rf build-conan
 # don't want to have accidentally affect our dependencies (it makes the build far too large).
 # The override itself is derived from https://github.com/conan-io/conan/issues/12656.
 
-conan install . \
+conan install . --update \
+      --profile=protobuf-override.profile \
       --build=missing \
-      -o:a "&:shared=False" \
       -s:a build_type=Release \
-      -s:a compiler.cppstd=17
+      -s:a "viam-cpp-sdk/*:build_type=RelWithDebInfo" \
+      -s:a compiler.cppstd=17 \
+      -o:a "*:shared=False" \
+      -o:a "&:shared=False"
 
 conan build . \
       --output-folder=build-conan \
+      --profile=protobuf-override.profile \
       --build=none \
-      -o:a "&:shared=False" \
       -s:a build_type=Release \
-      -s:a "&:build_type=RelWithDebInfo" \
-      -s:a compiler.cppstd=17
+      -s:a "viam-cpp-sdk/*:build_type=RelWithDebInfo" \
+      -s:a compiler.cppstd=17 \
+      -o:a "*:shared=False" \
+      -o:a "&:shared=False"

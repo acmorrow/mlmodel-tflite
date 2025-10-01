@@ -43,9 +43,11 @@ class viamTfliteCpu(ConanFile):
     def requirements(self):
         # NOTE: If you update the `viam-cpp-sdk` dependency here, it
         # should also be updated in `bin/setup.{sh,ps1}`.
-        self.requires("viam-cpp-sdk/0.13.2")
+        self.requires("viam-cpp-sdk/0.20.0")
         self.requires("tensorflow-lite/2.15.0")
-        self.requires("abseil/20240116.2", override=True)
+        # NOTE: This should match what the viam-cpp-sdk pulls (indirectly, via grpc/protobuf)
+        # TODO: Is there a way to express that better than hardcoding it?
+        self.requires("abseil/20250127.0", override=True)
 
     def generate(self):
         tc = CMakeToolchain(self)
