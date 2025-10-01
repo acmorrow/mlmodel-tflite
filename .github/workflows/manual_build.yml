@@ -24,9 +24,10 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Windows 10 SDK
         if: runner.os == 'Windows'
-        uses: GuillaumeFalourd/setup-windows10-sdk-action@v2.4
+        uses: ChristopheLav/windows-sdk-install@v1
         with:
-          sdk-version: 17763
+          version-sdk: 17763
+          features: OptionId.DesktopCPPx64
       - name: Verify SDK installation and registry
         if: runner.os == 'Windows'
         shell: pwsh
