@@ -54,7 +54,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Windows 10 SDK
         if: runner.os == 'Windows'
-        uses: ChristopheLav/windows-sdk-install@88d7287
+        uses: ChristopheLav/windows-sdk-install@88d72875fb873886ea398ed04041446da6f26f86
         with:
           version-sdk: 17763
           features: OptionId.DesktopCPPx64
