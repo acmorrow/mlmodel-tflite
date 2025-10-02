@@ -55,7 +55,7 @@ conan build . `
       -s:h build_type=Release `
       -s:h "viam-cpp-sdk/*:build_type=RelWithDebInfo" `
       -s:h "&:build_type=RelWithDebInfo" `
-      -s:h compiler.cppstd=17 `
+      -s:a compiler.cppstd=17 `
       -o:h "*:shared=False" `
       -o:h "&:shared=False" `
       -o:h "grpc/*:csharp_plugin=False" `
