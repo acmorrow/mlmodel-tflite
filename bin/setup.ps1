@@ -45,20 +45,20 @@ conan install --update `
       --profile=protobuf-override.profile `
       --build=missing `
       --requires=viam-cpp-sdk/$VIAM_CPP_SDK_VERSION `
-      -s:a build_type=Release `
-      -s:a "&:build_type=RelWithDebInfo" `
-      -s:a compiler.cppstd=17 `
-      -o:a "*:shared=False" `
-      -o:a "&:shared=False" `
-      -o:a "grpc/*:csharp_plugin=False" `
-      -o:a "grpc/*:node_plugin=False" `
-      -o:a "grpc/*:objective_c_plugin=False" `
-      -o:a "grpc/*:php_plugin=False" `
-      -o:a "grpc/*:python_plugin=False" `
-      -o:a "grpc/*:ruby_plugin=False" `
-      -o:a "grpc/*:otel_plugin=False" `
-      -c:a tools.microsoft:winsdk_version=10.0.17763.0 `
-      -s:a compiler.runtime=static
+      -s:h build_type=Release `
+      -s:h "&:build_type=RelWithDebInfo" `
+      -s:h compiler.cppstd=17 `
+      -o:h "*:shared=False" `
+      -o:h "&:shared=False" `
+      -o:h "grpc/*:csharp_plugin=False" `
+      -o:h "grpc/*:node_plugin=False" `
+      -o:h "grpc/*:objective_c_plugin=False" `
+      -o:h "grpc/*:php_plugin=False" `
+      -o:h "grpc/*:python_plugin=False" `
+      -o:h "grpc/*:ruby_plugin=False" `
+      -o:h "grpc/*:otel_plugin=False" `
+      -c:h tools.microsoft:winsdk_version=10.0.17763.0 `
+      -s:h compiler.runtime=static
 
 # Clean up
 Pop-Location  # viam-cpp-sdk
