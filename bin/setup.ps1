@@ -41,9 +41,6 @@ $VIAM_CPP_SDK_VERSION = (conan inspect -vquiet . --format=json | ConvertFrom-Jso
 # it anyway. Pin to the Windows 10 1809 associated windows SDK, and
 # opt for the static compiler runtime so we don't have a dependency on
 # the VC redistributable.
-#
-# TODO: Note `-tf ""`, which disables the self test. I have not been
-# able to get this working on windows.
 conan install --update `
       --profile=protobuf-override.profile `
       --build=missing `
@@ -53,8 +50,15 @@ conan install --update `
       -s:a compiler.cppstd=17 `
       -o:a "*:shared=False" `
       -o:a "&:shared=False" `
+      -o:a "grpc/*:csharp_plugin=False" `
+      -o:a "grpc/*:node_plugin=False" `
+      -o:a "grpc/*:objective_c_plugin=False" `
+      -o:a "grpc/*:php_plugin=False" `
+      -o:a "grpc/*:python_plugin=False" `
+      -o:a "grpc/*:ruby_plugin=False" `
+      -o:a "grpc/*:otel_plugin=False" `
       -c:a tools.microsoft:winsdk_version=10.0.17763.0 `
-      -s:a compiler.runtime=static `
+      -s:a compiler.runtime=static
 
 # Clean up
 Pop-Location  # viam-cpp-sdk

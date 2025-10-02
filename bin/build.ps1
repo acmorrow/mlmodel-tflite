@@ -38,6 +38,13 @@ conan install . --update `
       -s:a compiler.cppstd=17 `
       -o:a "*:shared=False" `
       -o:a "&:shared=False" `
+      -o:a "grpc/*:csharp_plugin=False" `
+      -o:a "grpc/*:node_plugin=False" `
+      -o:a "grpc/*:objective_c_plugin=False" `
+      -o:a "grpc/*:php_plugin=False" `
+      -o:a "grpc/*:python_plugin=False" `
+      -o:a "grpc/*:ruby_plugin=False" `
+      -o:a "grpc/*:otel_plugin=False" `
       -c:a tools.microsoft:winsdk_version=10.0.17763.0 `
       -s:a compiler.runtime=static
 
@@ -51,5 +58,12 @@ conan build . `
       -s:a compiler.cppstd=17 `
       -o:a "*:shared=False" `
       -o:a "&:shared=False" `
+      -o:a "grpc/*:csharp_plugin=False" `
+      -o:a "grpc/*:node_plugin=False" `
+      -o:a "grpc/*:objective_c_plugin=False" `
+      -o:a "grpc/*:php_plugin=False" `
+      -o:a "grpc/*:python_plugin=False" `
+      -o:a "grpc/*:ruby_plugin=False" `
+      -o:a "grpc/*:otel_plugin=False" `
       -c:a tools.microsoft:winsdk_version=10.0.17763.0 `
       -s:a compiler.runtime=static
