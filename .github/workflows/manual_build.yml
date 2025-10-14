@@ -6,6 +6,7 @@ jobs:
   build:
     name: Build the module
     strategy:
+      fail-fast: false
       matrix:
         build_target:
           - runs_on: ubuntu-22.04

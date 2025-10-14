@@ -30,7 +30,6 @@ conan install . --update `
       -s:h compiler.cppstd=17 `
       -o:h "*:shared=False" `
       -o:h "&:shared=False" `
-      -o:h "grpc/*:cpp_plugin=False" `
       -o:a "grpc/*:csharp_plugin=False" `
       -o:a "grpc/*:node_plugin=False" `
       -o:a "grpc/*:objective_c_plugin=False" `
@@ -50,7 +49,6 @@ conan build . `
       -s:a compiler.cppstd=17 `
       -o:h "*:shared=False" `
       -o:h "&:shared=False" `
-      -o:h "grpc/*:cpp_plugin=False" `
       -o:a "grpc/*:csharp_plugin=False" `
       -o:a "grpc/*:node_plugin=False" `
       -o:a "grpc/*:objective_c_plugin=False" `
