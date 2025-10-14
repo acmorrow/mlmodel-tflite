@@ -8,13 +8,6 @@ refreshenv
 # Clean up any prior build
 Remove-Item -Recurse -Force build-conan -ErrorAction SilentlyContinue
 
-# Otherwise, the C++ SDK build ends up creating two copies of proto and then mixes up which one to use.
-@'
-include(default)
-[replace_tool_requires]
-protobuf/*: protobuf/<host_version>
-'@ | Out-File -FilePath protobuf-override.profile -Encoding ASCII
-
 # Build the tflite_cpu module
 #
 # We want a static binary, so we turn off shared. Elect for C++17
@@ -30,7 +23,6 @@ protobuf/*: protobuf/<host_version>
 # The override itself is derived from https://github.com/conan-io/conan/issues/12656.
 
 conan install . --update `
-      --profile=protobuf-override.profile `
       --build=missing `
       -s:h build_type=Release `
       -s:h "viam-cpp-sdk/*:build_type=RelWithDebInfo" `
@@ -38,19 +30,19 @@ conan install . --update `
       -s:h compiler.cppstd=17 `
       -o:h "*:shared=False" `
       -o:h "&:shared=False" `
-      -o:h "grpc/*:csharp_plugin=False" `
-      -o:h "grpc/*:node_plugin=False" `
-      -o:h "grpc/*:objective_c_plugin=False" `
-      -o:h "grpc/*:php_plugin=False" `
-      -o:h "grpc/*:python_plugin=False" `
-      -o:h "grpc/*:ruby_plugin=False" `
-      -o:h "grpc/*:otel_plugin=False" `
+      -o:h "grpc/*:cpp_plugin=False" `
+      -o:a "grpc/*:csharp_plugin=False" `
+      -o:a "grpc/*:node_plugin=False" `
+      -o:a "grpc/*:objective_c_plugin=False" `
+      -o:a "grpc/*:php_plugin=False" `
+      -o:a "grpc/*:python_plugin=False" `
+      -o:a "grpc/*:ruby_plugin=False" `
+      -o:a "grpc/*:otel_plugin=False" `
       -c:h tools.microsoft:winsdk_version=10.0.17763.0 `
       -s:h compiler.runtime=static
 
 conan build . `
       --output-folder=build-conan `
-      --profile=protobuf-override.profile `
       --build=none `
       -s:h build_type=Release `
       -s:h "viam-cpp-sdk/*:build_type=RelWithDebInfo" `
@@ -58,12 +50,13 @@ conan build . `
       -s:a compiler.cppstd=17 `
       -o:h "*:shared=False" `
       -o:h "&:shared=False" `
-      -o:h "grpc/*:csharp_plugin=False" `
-      -o:h "grpc/*:node_plugin=False" `
-      -o:h "grpc/*:objective_c_plugin=False" `
-      -o:h "grpc/*:php_plugin=False" `
-      -o:h "grpc/*:python_plugin=False" `
-      -o:h "grpc/*:ruby_plugin=False" `
-      -o:h "grpc/*:otel_plugin=False" `
+      -o:h "grpc/*:cpp_plugin=False" `
+      -o:a "grpc/*:csharp_plugin=False" `
+      -o:a "grpc/*:node_plugin=False" `
+      -o:a "grpc/*:objective_c_plugin=False" `
+      -o:a "grpc/*:php_plugin=False" `
+      -o:a "grpc/*:python_plugin=False" `
+      -o:a "grpc/*:ruby_plugin=False" `
+      -o:a "grpc/*:otel_plugin=False" `
       -c:h tools.microsoft:winsdk_version=10.0.17763.0 `
       -s:h compiler.runtime=static

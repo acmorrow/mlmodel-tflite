@@ -8,13 +8,6 @@ set -euxo pipefail
 # Clean up any prior build
 rm -rf build-conan
 
-# Otherwise, the C++ SDK build ends up creating two copies of proto and then mixes up which one to use.
-cat > protobuf-override.profile << 'EOF'
-include(default)
-[replace_tool_requires]
-protobuf/*: protobuf/<host_version>
-EOF
-
 # Build the tflite_cpu module
 #
 # We want a static binary, so we turn off shared. Elect for C++17
@@ -28,22 +21,36 @@ EOF
 # The override itself is derived from https://github.com/conan-io/conan/issues/12656.
 
 conan install . --update \
-      --profile=protobuf-override.profile \
       --build=missing \
-      -s:a build_type=Release \
-      -s:a "viam-cpp-sdk/*:build_type=RelWithDebInfo" \
-      -s:a "&:build_type=RelWithDebInfo" \
+      -s:h build_type=Release \
+      -s:h "viam-cpp-sdk/*:build_type=RelWithDebInfo" \
+      -s:h "&:build_type=RelWithDebInfo" \
       -s:a compiler.cppstd=17 \
-      -o:a "*:shared=False" \
-      -o:a "&:shared=False"
+      -o:h "*:shared=False" \
+      -o:h "&:shared=False" \
+      -o:h "grpc/*:cpp_plugin=False" \
+      -o:a "grpc/*:csharp_plugin=False" \
+      -o:a "grpc/*:node_plugin=False" \
+      -o:a "grpc/*:objective_c_plugin=False" \
+      -o:a "grpc/*:php_plugin=False" \
+      -o:a "grpc/*:python_plugin=False" \
+      -o:a "grpc/*:ruby_plugin=False" \
+      -o:a "grpc/*:otel_plugin=False"
 
 conan build . \
       --output-folder=build-conan \
-      --profile=protobuf-override.profile \
       --build=none \
-      -s:a build_type=Release \
-      -s:a "viam-cpp-sdk/*:build_type=RelWithDebInfo" \
-      -s:a "&:build_type=RelWithDebInfo" \
+      -s:h build_type=Release \
+      -s:h "viam-cpp-sdk/*:build_type=RelWithDebInfo" \
+      -s:h "&:build_type=RelWithDebInfo" \
       -s:a compiler.cppstd=17 \
-      -o:a "*:shared=False" \
-      -o:a "&:shared=False"
+      -o:h "*:shared=False" \
+      -o:h "&:shared=False" \
+      -o:h "grpc/*:cpp_plugin=False" \
+      -o:a "grpc/*:csharp_plugin=False" \
+      -o:a "grpc/*:node_plugin=False" \
+      -o:a "grpc/*:objective_c_plugin=False" \
+      -o:a "grpc/*:php_plugin=False" \
+      -o:a "grpc/*:python_plugin=False" \
+      -o:a "grpc/*:ruby_plugin=False" \
+      -o:a "grpc/*:otel_plugin=False"

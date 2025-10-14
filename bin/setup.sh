@@ -16,17 +16,10 @@ git clone https://github.com/viamrobotics/viam-cpp-sdk.git
 pushd viam-cpp-sdk
 
 # NOTE: If you change this version, also change it in the `conanfile.py` requirements
-git checkout releases/v0.20.0
+git checkout releases/v0.20.1
 
 # Export the recipe to the cache so we can skip rebuilds gracefully
 conan export .
-
-# Otherwise, the C++ SDK build ends up creating two copies of proto and then mixes up which one to use.
-cat > protobuf-override.profile << 'EOF'
-include(default)
-[replace_tool_requires]
-protobuf/*: protobuf/<host_version>
-EOF
 
 # Dig out the declared version of the module so we can use it for arguments to --build and --requires below.
 VIAM_CPP_SDK_VERSION=$(conan inspect -vquiet . --format=json | jq -r '.version')
@@ -38,14 +31,21 @@ VIAM_CPP_SDK_VERSION=$(conan inspect -vquiet . --format=json | jq -r '.version')
 # it anyway.
 
 conan install --update \
-      --profile=protobuf-override.profile \
       --build=missing \
       --requires=viam-cpp-sdk/${VIAM_CPP_SDK_VERSION} \
-      -s:a build_type=Release \
-      -s:a "&:build_type=RelWithDebInfo" \
+      -s:h build_type=Release \
+      -s:h "&:build_type=RelWithDebInfo" \
       -s:a compiler.cppstd=17 \
-      -o:a "*:shared=False" \
-      -o:a "&:shared=False"
+      -o:h "*:shared=False" \
+      -o:h "&:shared=False" \
+      -o:h "grpc/*:cpp_plugin=False" \
+      -o:a "grpc/*:csharp_plugin=False" \
+      -o:a "grpc/*:node_plugin=False" \
+      -o:a "grpc/*:objective_c_plugin=False" \
+      -o:a "grpc/*:php_plugin=False" \
+      -o:a "grpc/*:python_plugin=False" \
+      -o:a "grpc/*:ruby_plugin=False" \
+      -o:a "grpc/*:otel_plugin=False"
 
 # Cleanup
 popd  # viam-cpp-sdk
