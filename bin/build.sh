@@ -22,12 +22,12 @@ rm -rf build-conan
 
 conan install . --update \
       --build=missing \
-      -s:h build_type=Release \
-      -s:h "viam-cpp-sdk/*:build_type=RelWithDebInfo" \
-      -s:h "&:build_type=RelWithDebInfo" \
+      -s:a build_type=Release \
+      -s:a "viam-cpp-sdk/*:build_type=RelWithDebInfo" \
+      -s:a "&:build_type=RelWithDebInfo" \
       -s:a compiler.cppstd=17 \
-      -o:h "*:shared=False" \
-      -o:h "&:shared=False" \
+      -o:a "*:shared=False" \
+      -o:a "&:shared=False" \
       -o:a "grpc/*:csharp_plugin=False" \
       -o:a "grpc/*:node_plugin=False" \
       -o:a "grpc/*:objective_c_plugin=False" \
@@ -39,12 +39,12 @@ conan install . --update \
 conan build . \
       --output-folder=build-conan \
       --build=none \
-      -s:h build_type=Release \
-      -s:h "viam-cpp-sdk/*:build_type=RelWithDebInfo" \
-      -s:h "&:build_type=RelWithDebInfo" \
+      -s:a build_type=Release \
+      -s:a "viam-cpp-sdk/*:build_type=RelWithDebInfo" \
+      -s:a "&:build_type=RelWithDebInfo" \
       -s:a compiler.cppstd=17 \
-      -o:h "*:shared=False" \
-      -o:h "&:shared=False" \
+      -o:a "*:shared=False" \
+      -o:a "&:shared=False" \
       -o:a "grpc/*:csharp_plugin=False" \
       -o:a "grpc/*:node_plugin=False" \
       -o:a "grpc/*:objective_c_plugin=False" \

@@ -37,11 +37,11 @@ $VIAM_CPP_SDK_VERSION = (conan inspect -vquiet . --format=json | ConvertFrom-Jso
 conan install --update `
       --build=missing `
       --requires=viam-cpp-sdk/$VIAM_CPP_SDK_VERSION `
-      -s:h build_type=Release `
-      -s:h "&:build_type=RelWithDebInfo" `
+      -s:a build_type=Release `
+      -s:a "&:build_type=RelWithDebInfo" `
       -s:a compiler.cppstd=17 `
-      -o:h "*:shared=False" `
-      -o:h "&:shared=False" `
+      -o:a "*:shared=False" `
+      -o:a "&:shared=False" `
       -o:a "grpc/*:csharp_plugin=False" `
       -o:a "grpc/*:node_plugin=False" `
       -o:a "grpc/*:objective_c_plugin=False" `
@@ -49,8 +49,9 @@ conan install --update `
       -o:a "grpc/*:python_plugin=False" `
       -o:a "grpc/*:ruby_plugin=False" `
       -o:a "grpc/*:otel_plugin=False" `
-      -c:h tools.microsoft:winsdk_version=10.0.17763.0 `
-      -s:h compiler.runtime=static
+      -c:a tools.microsoft:winsdk_version=10.0.17763.0 `
+      -c:a tools.cmake.cmaketoolchain:extra_variables="{'gRPC_MSVC_STATIC_RUNTIME': 'ON'}" `
+      -s:a compiler.runtime=static
 
 # Clean up
 Pop-Location  # viam-cpp-sdk

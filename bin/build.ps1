@@ -24,12 +24,12 @@ Remove-Item -Recurse -Force build-conan -ErrorAction SilentlyContinue
 
 conan install . --update `
       --build=missing `
-      -s:h build_type=Release `
-      -s:h "viam-cpp-sdk/*:build_type=RelWithDebInfo" `
-      -s:h "&:build_type=RelWithDebInfo" `
-      -s:h compiler.cppstd=17 `
-      -o:h "*:shared=False" `
-      -o:h "&:shared=False" `
+      -s:a build_type=Release `
+      -s:a "viam-cpp-sdk/*:build_type=RelWithDebInfo" `
+      -s:a "&:build_type=RelWithDebInfo" `
+      -s:a compiler.cppstd=17 `
+      -o:a "*:shared=False" `
+      -o:a "&:shared=False" `
       -o:a "grpc/*:csharp_plugin=False" `
       -o:a "grpc/*:node_plugin=False" `
       -o:a "grpc/*:objective_c_plugin=False" `
@@ -37,18 +37,19 @@ conan install . --update `
       -o:a "grpc/*:python_plugin=False" `
       -o:a "grpc/*:ruby_plugin=False" `
       -o:a "grpc/*:otel_plugin=False" `
-      -c:h tools.microsoft:winsdk_version=10.0.17763.0 `
-      -s:h compiler.runtime=static
+      -c:a tools.microsoft:winsdk_version=10.0.17763.0 `
+      -c:a tools.cmake.cmaketoolchain:extra_variables="{'gRPC_MSVC_STATIC_RUNTIME': 'ON'}" `
+      -s:a compiler.runtime=static
 
 conan build . `
       --output-folder=build-conan `
       --build=none `
-      -s:h build_type=Release `
-      -s:h "viam-cpp-sdk/*:build_type=RelWithDebInfo" `
-      -s:h "&:build_type=RelWithDebInfo" `
+      -s:a build_type=Release `
+      -s:a "viam-cpp-sdk/*:build_type=RelWithDebInfo" `
+      -s:a "&:build_type=RelWithDebInfo" `
       -s:a compiler.cppstd=17 `
-      -o:h "*:shared=False" `
-      -o:h "&:shared=False" `
+      -o:a "*:shared=False" `
+      -o:a "&:shared=False" `
       -o:a "grpc/*:csharp_plugin=False" `
       -o:a "grpc/*:node_plugin=False" `
       -o:a "grpc/*:objective_c_plugin=False" `
@@ -56,5 +57,6 @@ conan build . `
       -o:a "grpc/*:python_plugin=False" `
       -o:a "grpc/*:ruby_plugin=False" `
       -o:a "grpc/*:otel_plugin=False" `
-      -c:h tools.microsoft:winsdk_version=10.0.17763.0 `
-      -s:h compiler.runtime=static
+      -c:a tools.microsoft:winsdk_version=10.0.17763.0 `
+      -c:a tools.cmake.cmaketoolchain:extra_variables="{'gRPC_MSVC_STATIC_RUNTIME': 'ON'}" `
+      -s:a compiler.runtime=static

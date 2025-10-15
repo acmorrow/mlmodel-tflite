@@ -33,11 +33,11 @@ VIAM_CPP_SDK_VERSION=$(conan inspect -vquiet . --format=json | jq -r '.version')
 conan install --update \
       --build=missing \
       --requires=viam-cpp-sdk/${VIAM_CPP_SDK_VERSION} \
-      -s:h build_type=Release \
-      -s:h "&:build_type=RelWithDebInfo" \
+      -s:a build_type=Release \
+      -s:a "&:build_type=RelWithDebInfo" \
       -s:a compiler.cppstd=17 \
-      -o:h "*:shared=False" \
-      -o:h "&:shared=False" \
+      -o:a "*:shared=False" \
+      -o:a "&:shared=False" \
       -o:a "grpc/*:csharp_plugin=False" \
       -o:a "grpc/*:node_plugin=False" \
       -o:a "grpc/*:objective_c_plugin=False" \
