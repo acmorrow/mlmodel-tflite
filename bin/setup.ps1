@@ -19,7 +19,13 @@ git clone https://github.com/viamrobotics/viam-cpp-sdk.git
 Push-Location viam-cpp-sdk
 
 # NOTE: If you change this version, also change it in the `conanfile.py` requirements
-git checkout releases/v0.13.2
+git checkout releases/v0.20.1
+
+# Export the recipe to the cache so we can skip rebuilds gracefully
+conan export .
+
+# Dig out the declared version of the module so we can use it for arguments to --build and --requires below.
+$VIAM_CPP_SDK_VERSION = (conan inspect -vquiet . --format=json | ConvertFrom-Json).version
 
 # Build the C++ SDK repo.
 #
@@ -28,17 +34,24 @@ git checkout releases/v0.13.2
 # it anyway. Pin to the Windows 10 1809 associated windows SDK, and
 # opt for the static compiler runtime so we don't have a dependency on
 # the VC redistributable.
-#
-# TODO: Note `-tf ""`, which disables the self test. I have not been
-# able to get this working on windows.
-conan create . `
+conan install --update `
       --build=missing `
-      -o:a "&:shared=False" `
+      --requires=viam-cpp-sdk/$VIAM_CPP_SDK_VERSION `
       -s:a build_type=Release `
+      -s:a "&:build_type=RelWithDebInfo" `
       -s:a compiler.cppstd=17 `
+      -o:a "*:shared=False" `
+      -o:a "&:shared=False" `
+      -o:a "grpc/*:csharp_plugin=False" `
+      -o:a "grpc/*:node_plugin=False" `
+      -o:a "grpc/*:objective_c_plugin=False" `
+      -o:a "grpc/*:php_plugin=False" `
+      -o:a "grpc/*:python_plugin=False" `
+      -o:a "grpc/*:ruby_plugin=False" `
+      -o:a "grpc/*:otel_plugin=False" `
       -c:a tools.microsoft:winsdk_version=10.0.17763.0 `
-      -s:a compiler.runtime=static `
-      -tf `"`"
+      -c:a tools.cmake.cmaketoolchain:extra_variables="{'gRPC_MSVC_STATIC_RUNTIME': 'ON'}" `
+      -s:a compiler.runtime=static
 
 # Clean up
 Pop-Location  # viam-cpp-sdk

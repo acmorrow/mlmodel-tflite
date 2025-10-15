@@ -22,20 +22,41 @@ Remove-Item -Recurse -Force build-conan -ErrorAction SilentlyContinue
 # don't want to have accidentally affect our dependencies (it makes the build far too large).
 # The override itself is derived from https://github.com/conan-io/conan/issues/12656.
 
-conan install . `
+conan install . --update `
       --build=missing `
-      -o:a "&:shared=False" `
       -s:a build_type=Release `
+      -s:a "viam-cpp-sdk/*:build_type=RelWithDebInfo" `
+      -s:a "&:build_type=RelWithDebInfo" `
       -s:a compiler.cppstd=17 `
+      -o:a "*:shared=False" `
+      -o:a "&:shared=False" `
+      -o:a "grpc/*:csharp_plugin=False" `
+      -o:a "grpc/*:node_plugin=False" `
+      -o:a "grpc/*:objective_c_plugin=False" `
+      -o:a "grpc/*:php_plugin=False" `
+      -o:a "grpc/*:python_plugin=False" `
+      -o:a "grpc/*:ruby_plugin=False" `
+      -o:a "grpc/*:otel_plugin=False" `
       -c:a tools.microsoft:winsdk_version=10.0.17763.0 `
+      -c:a tools.cmake.cmaketoolchain:extra_variables="{'gRPC_MSVC_STATIC_RUNTIME': 'ON'}" `
       -s:a compiler.runtime=static
 
 conan build . `
       --output-folder=build-conan `
       --build=none `
-      -o:a "&:shared=False" `
       -s:a build_type=Release `
+      -s:a "viam-cpp-sdk/*:build_type=RelWithDebInfo" `
       -s:a "&:build_type=RelWithDebInfo" `
       -s:a compiler.cppstd=17 `
+      -o:a "*:shared=False" `
+      -o:a "&:shared=False" `
+      -o:a "grpc/*:csharp_plugin=False" `
+      -o:a "grpc/*:node_plugin=False" `
+      -o:a "grpc/*:objective_c_plugin=False" `
+      -o:a "grpc/*:php_plugin=False" `
+      -o:a "grpc/*:python_plugin=False" `
+      -o:a "grpc/*:ruby_plugin=False" `
+      -o:a "grpc/*:otel_plugin=False" `
       -c:a tools.microsoft:winsdk_version=10.0.17763.0 `
+      -c:a tools.cmake.cmaketoolchain:extra_variables="{'gRPC_MSVC_STATIC_RUNTIME': 'ON'}" `
       -s:a compiler.runtime=static
